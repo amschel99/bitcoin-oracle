@@ -40,18 +40,16 @@ pub struct CoinTime {
     about = "Crypto Price - Command Line Interface (CLI) Application"
 )]
 struct Cli {
-    /// Interval in milliseconds. An example would be an interval of 30000 milliseconds or 30 seconds.
     #[clap(short, long, default_value = "30000")]
     interval: u64,
-    /// Repeat Frequency. An example would be a repeat frequency of 10 times.
+
     #[clap(short, long, default_value = "10")]
     frequency: i32,
     #[clap(short, long, default_value = "USD")]
-    // / Rates Symbol. An example would be USD.
     rates: String,
 }
 
-pub fn crypto_publisher() {
+pub fn fetch_price() {
     let args = Cli::parse();
     let mut count = 0i32;
 

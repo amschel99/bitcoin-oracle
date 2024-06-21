@@ -1,6 +1,5 @@
-
-mod crypto_price;
-
+mod fetch_price;
+mod lamport;
 fn main() {
-    crypto_price::crypto_publisher();
+    fetch_price::fetch_price();
 }
