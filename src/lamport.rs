@@ -1,4 +1,5 @@
 use rand::prelude::*;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
 const KEY_SIZE: usize = 256;
@@ -8,15 +9,16 @@ fn random_string() -> String {
     let str_bytes = rand::thread_rng().gen::<[u8; KEY_ELEMENT_SIZE]>();
     hex::encode(str_bytes)
 }
-#[derive(Debug)]
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PrivateKey {
     key_pairs: Vec<(String, String)>,
 }
-
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PublicKey {
     key_pairs: Vec<(String, String)>,
 }
-
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Signature {
     signatures: Vec<String>,
 }
@@ -25,17 +27,50 @@ impl PrivateKey {
     pub fn get_key(&self, i: usize) -> (String, String) {
         self.key_pairs[i].clone()
     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        let json_str = serde_json::to_string(self).expect("Failed to serialize to JSON");
+
+        json_str.into_bytes()
+    }
+
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, serde_json::Error> {
+        let json_str = String::from_utf8_lossy(bytes);
+
+        serde_json::from_str(&json_str)
+    }
 }
 
 impl PublicKey {
     pub fn get_key(&self, i: usize) -> (String, String) {
         self.key_pairs[i].clone()
     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        let json_str = serde_json::to_string(self).expect("Failed to serialize to JSON");
+
+        json_str.into_bytes()
+    }
+
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, serde_json::Error> {
+        let json_str = String::from_utf8_lossy(bytes);
+
+        serde_json::from_str(&json_str)
+    }
 }
 
 impl Signature {
     pub fn get_key(&self, i: usize) -> String {
         self.signatures[i].clone()
+    }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        let json_str = serde_json::to_string(self).expect("Failed to serialize to JSON");
+
+        json_str.into_bytes()
+    }
+
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, serde_json::Error> {
+        let json_str = String::from_utf8_lossy(bytes);
+
+        serde_json::from_str(&json_str)
     }
 }
 
@@ -158,4 +193,7 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn test_serialize_and_deserialize() {}
 }

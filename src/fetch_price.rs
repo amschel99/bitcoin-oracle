@@ -37,7 +37,7 @@ pub struct CoinTime {
 #[clap(
     author,
     version = "0.1.0",
-    about = "Crypto Price - Command Line Interface (CLI) Application"
+    about = "BTC oracle - Command Line Interface (CLI) Application"
 )]
 struct Cli {
     #[clap(short, long, default_value = "30000")]
